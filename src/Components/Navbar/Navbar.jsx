@@ -181,7 +181,12 @@ const Navbar = () => {
           </InputGroup>
         </Box>
         {/* <Box  w='180px' h='30'> */}
-        <Flex justifyContent="space-between" w={["50%", "18%"]} h="35">
+        <Flex
+          justifyContent="space-around"
+          alignItems={"center"}
+          w={["50%", "12%"]}
+          h="35"
+        >
           {sessionKey?.length === 0 ? (
             <Menu>
               <MenuButton as={Button} colorScheme="teal">
@@ -197,10 +202,12 @@ const Navbar = () => {
           ) : (
             <Menu>
               <MenuButton>
-                <Avatar />
+                <Avatar size={"sm"} />
               </MenuButton>
               <MenuList>
-                <MenuItem>Account Info</MenuItem>
+                <MenuItem>
+                  <Link href={"/myaccount"}>Account Info</Link>
+                </MenuItem>
                 <MenuItem
                   onClick={() => {
                     sessionStorage.removeItem("LoggedUser_id");
@@ -212,7 +219,7 @@ const Navbar = () => {
               </MenuList>
             </Menu>
           )}
-          <Link href={"/myaccount"}>
+          {/* <Link href={"/myaccount"}>
             <Button
               w={["40px", "80px", "100px"]}
               border="none"
@@ -221,7 +228,7 @@ const Navbar = () => {
             >
               <MdPersonOutline fontSize="28px" />
             </Button>
-          </Link>
+          </Link> */}
 
           <Button w="30%" border="none" background="none" fontSize="28px">
             <Link href={"/cart"}>

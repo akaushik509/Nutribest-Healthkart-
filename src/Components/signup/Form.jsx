@@ -52,6 +52,19 @@ export default function Form() {
       .then((res) => setUsers(res.data));
   };
 
+  const handleValidate = () => {
+    if (
+      signCreds.Name.length == 0 ||
+      signCreds.Phone.length == 0 ||
+      signCreds.Email.length == 0 ||
+      signCreds.Password.length == 0
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
   const submit = () => {
     let filter = users.filter(function(el) {
       if (el.Email === Email || el.Phone == Phone) {
@@ -67,28 +80,37 @@ export default function Form() {
         isClosable: true,
       });
     } else {
-      dispatch(SignUp(signCreds));
-      console.log(signCreds.id, signCreds);
-      toast({
-        title: `User Sucessfully Registered!`,
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
-      setSigncreds({
-        id: null,
-        Name: "",
-        Phone: "",
-        Email: "",
-        Image: "",
-        Password: "",
-        IsPrime: false,
-        Address: "",
-        Orders: [],
-      });
+      if (handleValidate == true) {
+        dispatch(SignUp(signCreds));
+        console.log(signCreds.id, signCreds);
+        toast({
+          title: `User Sucessfully Registered!`,
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+        setSigncreds({
+          id: null,
+          Name: "",
+          Phone: "",
+          Email: "",
+          Image: "",
+          Password: "",
+          IsPrime: false,
+          Address: "",
+          Orders: [],
+        });
+      } else {
+        toast({
+          title: `Fill All Details`,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
     }
   };
-
+  console.log(signCreds);
   const onchange = (e) => {
     const { name, value } = e.target;
     setSigncreds({
@@ -129,7 +151,6 @@ export default function Form() {
 
   // console.log(email, password);
   useEffect(() => {
-    // sessionStorage.setItem('myCat', JSON.stringify('myffff'));
     getCardapi();
   }, []);
 
@@ -149,11 +170,12 @@ export default function Form() {
             </Heading>
             {/* <Image w="40px" alt="logo" src="/images/logo.png" /> */}
           </Stack>
-          <Box rounded={"lg"} bg={"gray.700"} boxShadow={"lg"} p={8}>
+          <Box rounded={"lg"} bg={"gray.200"} boxShadow={"lg"} p={8}>
             <Stack spacing={4}>
               <FormControl id="name" isRequired>
                 <FormLabel>Name</FormLabel>
                 <Input
+                  border={"1px solid gray"}
                   onChange={onchange}
                   value={signCreds.Name}
                   name="Name"
@@ -164,6 +186,7 @@ export default function Form() {
               <FormControl id="email" isRequired>
                 <FormLabel>Email address</FormLabel>
                 <Input
+                  border={"1px solid gray"}
                   onChange={onchange}
                   value={signCreds.Email}
                   name="Email"
@@ -174,6 +197,7 @@ export default function Form() {
               <FormControl id="number" isRequired>
                 <FormLabel>Mobile No.</FormLabel>
                 <Input
+                  border={"1px solid gray"}
                   onChange={onchange}
                   value={signCreds.Phone}
                   name="Phone"
@@ -185,6 +209,7 @@ export default function Form() {
                 <FormLabel>Password</FormLabel>
                 <InputGroup>
                   <Input
+                    border={"1px solid gray"}
                     onChange={onchange}
                     value={signCreds.Password}
                     name="Password"
@@ -242,7 +267,7 @@ export default function Form() {
             </Heading>
             {/* <Image w="40px" alt="logo" src="/images/logo.png" /> */}
           </Stack>
-          <Box rounded={"lg"} bg={"gray.700"} boxShadow={"lg"} p={8}>
+          <Box rounded={"lg"} bg={"gray.200"} boxShadow={"lg"} p={8}>
             <Stack spacing={4}>
               {/* <FormControl id="name" isRequired>
                 <FormLabel>Name</FormLabel>
@@ -252,6 +277,7 @@ export default function Form() {
               <FormControl id="email" isRequired>
                 <FormLabel>Email address</FormLabel>
                 <Input
+                  border={"1px solid gray"}
                   onChange={(e) => {
                     setEmail(e.target.value);
                   }}
@@ -269,6 +295,7 @@ export default function Form() {
                 <FormLabel>Password</FormLabel>
                 <InputGroup>
                   <Input
+                    border={"1px solid gray"}
                     onChange={(e) => {
                       setPass(e.target.value);
                     }}

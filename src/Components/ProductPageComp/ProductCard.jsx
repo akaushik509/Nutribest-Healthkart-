@@ -33,8 +33,9 @@ export default function ProductCard({
   id,
   handleClick,
   AddedToCart,
+  product,
 }) {
-  // const [userId, setuserId] = React.useState(0);
+  const [userId, setuserId] = React.useState("");
   // const DiscountValue = (currVal, actualVal) => {
   //   currVal = currVal - Math.random();
   //   currVal = Number(currVal);
@@ -44,15 +45,10 @@ export default function ProductCard({
   // };
   // const useridentification = localStorage.getItem("user_id");
   // setuserId(useridentification);
-  // useEffect(() => {
-  //   const useridentification = localStorage.getItem("user_id");
-  //   setuserId(useridentification);
-  //   // outputDiscount = DiscountValue(
-  //   //   +product_minimum_offer_price,
-  //   //   +product_price
-  //   // );
-  //   //Function to calculate discount %
-  // }, []);
+  useEffect(() => {
+    const useridentification = sessionStorage.getItem("LoggedUser_id");
+    setuserId(useridentification);
+  }, []);
 
   return (
     <Card
@@ -183,7 +179,7 @@ export default function ProductCard({
       </CardBody>
       <CardFooter p={"2% 2% 5% 2%"}>
         <Button
-          // onClick={() => AddedToCart(userId, product)}
+          onClick={() => AddedToCart(userId, product)}
           border={"1px solid #ff8914"}
           color={"#ff8914"}
           fontWeight={"bold"}

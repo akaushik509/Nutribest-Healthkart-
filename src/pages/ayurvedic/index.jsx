@@ -19,8 +19,9 @@ const Product = () => {
   const [Review, setReview] = useState(0); // For setting the review;
   const [Discount, setDiscount] = useState(0); // For setting the discount;
   const [DiscountAccordingTo, setDiscountAccordingTo] = useState(""); // For setting the DiscountAccordingTo;
+  const [currentUserId, setCurrentUserId] = useState(0); // get current user id
 
-  console.log("Ayurvedic", Ayurvedic); // My data Array
+  // console.log("Ayurvedic", Ayurvedic); // My data Array
 
   // Filter function of Product Price
   const PriceChange = (event, checkval) => {
@@ -85,11 +86,6 @@ const Product = () => {
     setPageNo(changeBy);
   };
 
-  useEffect(() => {
-    FetchingDataForTotalPage();
-    getData();
-  }, [PageNo, DataLimit, Rating, maxPrice, Review]);
-
   // Funtion to get data of Healty juice
   const getData = useCallback(() => {
     axios
@@ -100,19 +96,49 @@ const Product = () => {
   }, [DataLimit, PageNo, Rating, Review, maxPrice]);
 
   // Function to add the product to cart
-  const AddedToCart = async (id, item) => {
-    setcartArray([...cartArray, { ...item, quantity: 1, cart: true }]);
-    // console.log("cartarray", cartArray);
-    try {
-      let res = await axios(`http://localhost:8080/User-Details/${id}`, {
-        method: "patch",
-        data: { Orders: cartArray },
-      });
-    } catch (e) {
-      console.log(e);
+
+  // const UpdateUserCart = () => {
+
+  // };
+
+  const AddedToCart = (userId, product) => {
+    setcartArray([...cartArray, { ...product, quantity: 1, cart: true }]);
+    if (cartArray.length > 0) {
+      axios
+        .patch(`http://localhost:8080/User-Details/${currentUserId}`, {
+          Orders: cartArray,
+        })
+        .then((res) => {
+          console.log("Added");
+        });
     }
+
+    // try {
+    //   axios
+    //     .get(`http://localhost:8080/User-Details/${currentUserId}`)
+    //     .then((res) => {
+    //       setcartArray(res.data.Orders);
+    //       if (cartArray.length > 0) {
+    //         console.log(currentUserId, cartArray);
+    //         setcartArray([
+    //           ...cartArray,
+    //           { ...product, quantity: 1, cart: true },
+    //         ]);
+    //         axios.patch(`http://localhost:8080/User-Details/${currentUserId}`, {
+    //           Orders: cartArray,
+    //         });
+    //       }
+    //     })
+    //     .then((res) => {
+    //       console.log("Added");
+    //     });
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
+  console.log("cartarray", cartArray);
+  console.log(currentUserId);
   //Fetching all the data for getting TotalPage for pagination
   const FetchingDataForTotalPage = async () => {
     try {
@@ -132,6 +158,25 @@ const Product = () => {
     // console.log("id", id);
     router.push(`/ayurvedic/${id}`);
   };
+
+  useEffect(() => {
+    const loggedUserId =
+      JSON.parse(sessionStorage.getItem("LoggedUser_id")) || [];
+    setCurrentUserId(loggedUserId);
+    if (currentUserId > 0) {
+      axios
+        .get(`http://localhost:8080/User-Details/${currentUserId}`)
+        .then((res) => {
+          setcartArray(res.data.Orders);
+        });
+    }
+  }, [currentUserId]);
+
+  useEffect(() => {
+    FetchingDataForTotalPage();
+    getData();
+    // GetUserOrders();
+  }, [PageNo, DataLimit, Rating, maxPrice, Review]);
 
   return (
     <Box>
@@ -179,6 +224,7 @@ const Product = () => {
                 {...item}
                 key={item.id}
                 handleClick={handleClick}
+                product={item}
               />
             ))}
           </SimpleGrid>

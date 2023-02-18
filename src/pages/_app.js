@@ -4,6 +4,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import Navbar from "../../src/Components/Navbar/Navbar";
 import { Provider } from "react-redux";
 import { store } from "@/redux/store";
+// import { theme } from "@/theme";
 export default function App({ Component, pageProps }) {
   const router = useRouter();
   const showHeader = router.pathname === "/admin" ? false : true;
